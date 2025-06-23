@@ -23,6 +23,7 @@ const page = () => {
 							Email
 						</label>
 						<input
+							defaultValue={state?.email}
 							type="email"
 							id="email"
 							name="email"

@@ -12,6 +12,7 @@ export async function signup(state, formData) {
 	if (!validatedForm.success) {
 		return {
 			errors: validatedForm.error.flatten().fieldErrors,
+			email: formData.get("email"),
 		};
 	}
 }
