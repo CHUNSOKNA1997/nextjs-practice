@@ -86,18 +86,17 @@ const page = () => {
 							type="submit"
 							className={` ${
 								isLoading ? "bg-gray-300" : "bg-blue-600"
-							} text-white py-2 px-4 rounded-sm transition duration-200 font-medium`}
+							} text-white py-2 w-full rounded-sm transition duration-200 font-medium hover:cursor-pointer hover:bg-blue-500`}
 						>
 							{isLoading ? "Loading..." : "Sign Up"}
 						</button>
-
-						<p className="text-gray-600">
-							Already have an account?{" "}
-							<Link href="/signin" className="text-blue-600 hover:underline">
-								Sign In
-							</Link>
-						</p>
 					</div>
+					<p className="text-gray-600 text-sm">
+						Already have an account?{" "}
+						<Link href="/signin" className="text-blue-600 hover:underline">
+							Sign In
+						</Link>
+					</p>
 				</form>
 			</div>
 		</main>
