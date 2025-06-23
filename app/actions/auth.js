@@ -1,9 +1,10 @@
 "use server";
 
 import bcrypt from "bcrypt";
-import { getCollections } from "../thirdparty/db";
-import { formDataSchema } from "../thirdparty/rules";
+import { getCollections } from "../lib/db";
+import { formDataSchema } from "../lib/rules";
 import { redirect } from "next/navigation";
+import { createSession } from "../lib/sessions";
 
 // validate the form data
 export async function signup(state, formData) {
@@ -50,6 +51,9 @@ export async function signup(state, formData) {
 		email,
 		password: hashedPassword,
 	});
+
+	// create session
+	await createSession(results.insertedId);
 
 	// redirect to the home page or dasboard
 	redirect("/");
