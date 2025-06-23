@@ -1,3 +1,4 @@
+import "server-only";
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 // get connection string from env file
