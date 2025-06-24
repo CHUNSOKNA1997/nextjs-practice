@@ -1,15 +1,22 @@
 "use client";
+
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import NavLink from "./NavLink";
+import getAuthUser from "../lib/getAuthUser";
 
 const links = [
 	{ label: "Sign In", href: "/signin" },
 	{ label: "Sign Up", href: "/signup" },
 ];
 
-const Navigation = () => {
+const Navigation = async () => {
 	const pathName = usePathname();
+
+	const authUser = await getAuthUser();
+
+	console.log(authUser);
+
 	return (
 		<nav className="w-full flex justify-between items-center px-8 py-6 border-b border-zinc-700 bg-zinc-700 text-white">
 			<Link
