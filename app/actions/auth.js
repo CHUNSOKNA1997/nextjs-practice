@@ -2,13 +2,13 @@
 
 import bcrypt from "bcrypt";
 import { getCollections } from "../lib/db";
-import { formDataSchema } from "../lib/rules";
+import { signinDataSchema, signupDataSchema } from "../lib/rules";
 import { redirect } from "next/navigation";
 import { createSession } from "../lib/sessions";
 
 // validate the form data
 export async function signup(state, formData) {
-	const validatedForm = formDataSchema.safeParse({
+	const validatedForm = signupDataSchema.safeParse({
 		email: formData.get("email"),
 		password: formData.get("password"),
 		confirmPassword: formData.get("confirmPassword"),
@@ -56,5 +56,52 @@ export async function signup(state, formData) {
 	await createSession(results.insertedId);
 
 	// redirect to the home page or dasboard
+	redirect("/");
+}
+
+export async function signin(state, formData) {
+	const validatedForm = signinDataSchema.safeParse({
+		email: formData.get("email"),
+		password: formData.get("password"),
+	});
+
+	if (!validatedForm.success) {
+		return {
+			errors: validatedForm.error.flatten().fieldErrors,
+			email: formData.get("email"),
+		};
+	}
+
+	const { email, password } = validatedForm.data;
+
+	const userCollection = await getCollections("users");
+	if (!userCollection) {
+		return {
+			errors: {
+				email: "Something went wrong",
+			},
+		};
+	}
+
+	const existUser = await userCollection.findOne({ email });
+	if (!existUser) {
+		return {
+			errors: {
+				email: "Email not found",
+			},
+		};
+	}
+
+	const isPasswordMatch = await bcrypt.compare(password, existUser.password);
+	if (!isPasswordMatch) {
+		return {
+			errors: {
+				password: ["Invalid password"],
+			},
+		};
+	}
+
+	await createSession(existUser._id.toString());
+
 	redirect("/");
 }

@@ -1,16 +1,21 @@
 "use client";
 
+import { useActionState } from "react";
 import Link from "next/link";
+import { signin } from "@/app/actions/auth";
 
-const page = () => {
+export default function Page() {
+	const [state, action, isLoading] = useActionState(signin, undefined);
+
 	return (
 		<main className="flex items-center justify-center">
 			<div className="p-8 w-120 ">
-				<h1 className="text-3xl font-bold text-letf mb-8 text-gray-900">
+				<h1 className="text-3xl font-bold text-left mb-8 text-gray-900">
 					Sign In
 				</h1>
-
-				<form className="space-y-6">
+				{/* Form */}
+				<form action={action} className="space-y-6">
+					{/* Email Field */}
 					<div className="space-y-2">
 						<label
 							htmlFor="email"
@@ -19,14 +24,22 @@ const page = () => {
 							Email
 						</label>
 						<input
+							defaultValue={state?.email}
 							type="email"
 							id="email"
 							name="email"
 							autoComplete="email"
-							className="w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className={`w-full px-3 py-2 border rounded-md text-gray-900 focus:outline-none focus:ring-2 ${
+								state?.errors?.email
+									? "border-red-500 focus:ring-red-500"
+									: "border-gray-300 focus:ring-blue-500"
+							}`}
 						/>
+						{state?.errors?.email && (
+							<p className="text-red-500 text-sm">{state.errors.email}</p>
+						)}
 					</div>
-
+					{/* Password Field */}
 					<div className="space-y-2">
 						<label
 							htmlFor="password"
@@ -38,19 +51,38 @@ const page = () => {
 							type="password"
 							id="password"
 							name="password"
-							className="w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className={`w-full px-3 py-2 border rounded-md text-gray-900 focus:outline-none focus:ring-2 ${
+								state?.errors?.password
+									? "border-red-500 focus:ring-red-500"
+									: "border-gray-300 focus:ring-blue-500"
+							}`}
 						/>
+						{state?.errors?.password && (
+							<div className="text-red-500 text-sm">
+								<ul>
+									{state.errors.password.map((error, index) => (
+										<li key={index}>{error}</li>
+									))}
+								</ul>
+							</div>
+						)}
 					</div>
-
-					<div className="flex items-center justify-between text-base">
+					{/* Submit Button */}
+					<div>
 						<button
+							disabled={isLoading}
 							type="submit"
-							className="bg-blue-600 hover:bg-blue-500 hover:cursor-pointer text-white w-full rounded-sm transition duration-200 font-medium py-2"
+							className={`w-full py-2 rounded-sm text-white font-medium transition duration-200 ${
+								isLoading
+									? "bg-gray-300 cursor-not-allowed"
+									: "bg-blue-600 hover:bg-blue-500"
+							}`}
 						>
-							Sign In
+							{isLoading ? "Loading..." : "Sign In"}
 						</button>
 					</div>
-					<p className="text-gray-600 text-sm">
+					{/* Sign Up Link */}
+					<p className="text-gray-600 text-sm text-center">
 						Don't have an account?{" "}
 						<Link href="/signup" className="text-blue-600 hover:underline">
 							Sign Up
@@ -60,6 +92,4 @@ const page = () => {
 			</div>
 		</main>
 	);
-};
-
-export default page;
+}

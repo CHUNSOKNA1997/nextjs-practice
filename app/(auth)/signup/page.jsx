@@ -13,8 +13,9 @@ const page = () => {
 				<h1 className="text-3xl font-bold text-letf mb-8 text-gray-900">
 					Sign Up
 				</h1>
-
+				{/* Sign Up Form */}
 				<form action={action} className="space-y-6">
+					{/* Email */}
 					<div className="space-y-2">
 						<label
 							htmlFor="email"
@@ -28,13 +29,18 @@ const page = () => {
 							id="email"
 							name="email"
 							autoComplete="email"
-							className="w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className={`w-full px-3 py-2 border rounded-md text-gray-900 focus:outline-none focus:ring-2 ${
+								state?.errors?.email
+									? "border-red-500 focus:ring-red-500"
+									: "border-gray-300 focus:ring-blue-500"
+							}`}
 						/>
 						{state?.errors?.email && (
 							<p className="text-red-500 text-sm">{state.errors.email}</p>
 						)}
 					</div>
 
+					{/* Password */}
 					<div className="space-y-2">
 						<label
 							htmlFor="password"
@@ -46,13 +52,17 @@ const page = () => {
 							type="password"
 							id="password"
 							name="password"
-							className="w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className={`w-full px-3 py-2 border rounded-md text-gray-900 focus:outline-none focus:ring-2 ${
+								state?.errors?.password
+									? "border-red-500 focus:ring-red-500"
+									: "border-gray-300 focus:ring-blue-500"
+							}`}
 						/>
 						{state?.errors?.password && (
-							<div className=" text-red-500 text-sm">
+							<div className="text-red-500 text-sm">
 								<p>Password must:</p>
 								<ol className="list-disc list-inside">
-									{state?.errors?.password.map((error, index) => (
+									{state.errors.password.map((error, index) => (
 										<li key={index}>{error}</li>
 									))}
 								</ol>
@@ -60,6 +70,7 @@ const page = () => {
 						)}
 					</div>
 
+					{/* Confirm Password */}
 					<div className="space-y-2">
 						<label
 							htmlFor="confirmPassword"
@@ -71,7 +82,11 @@ const page = () => {
 							type="password"
 							id="confirmPassword"
 							name="confirmPassword"
-							className="w-full px-3 py-2 border border-gray-300 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className={`w-full px-3 py-2 border rounded-md text-gray-900 focus:outline-none focus:ring-2 ${
+								state?.errors?.confirmPassword
+									? "border-red-500 focus:ring-red-500"
+									: "border-gray-300 focus:ring-blue-500"
+							}`}
 						/>
 						{state?.errors?.confirmPassword && (
 							<p className="text-red-500 text-sm">
@@ -80,18 +95,23 @@ const page = () => {
 						)}
 					</div>
 
-					<div className="flex items-center justify-between text-base">
+					{/* Submit */}
+					<div>
 						<button
 							disabled={isLoading}
 							type="submit"
-							className={` ${
-								isLoading ? "bg-gray-300" : "bg-blue-600"
-							} text-white py-2 w-full rounded-sm transition duration-200 font-medium hover:cursor-pointer hover:bg-blue-500`}
+							className={`w-full py-2 rounded-sm text-white font-medium transition duration-200 ${
+								isLoading
+									? "bg-gray-300 cursor-not-allowed"
+									: "bg-blue-600 hover:bg-blue-500"
+							}`}
 						>
 							{isLoading ? "Loading..." : "Sign Up"}
 						</button>
 					</div>
-					<p className="text-gray-600 text-sm">
+
+					{/* Sign In Link */}
+					<p className="text-gray-600 text-sm text-center">
 						Already have an account?{" "}
 						<Link href="/signin" className="text-blue-600 hover:underline">
 							Sign In
